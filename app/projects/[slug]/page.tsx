@@ -550,7 +550,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                           </div>
                           <div className="lg:col-span-4">
                             <ScrollAutoPlayVideo
-                              src="/images/CLARA/clara5.mp4"
+                              src="/images/CLARA/clara5small.mp4"
                               ariaLabel="Clara collage video 5"
                               className="h-[360px] w-full rounded-xl object-contain md:h-[500px]"
                             />
