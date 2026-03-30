@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Archivo, Bodoni_Moda } from "next/font/google";
-import fs from "node:fs";
-import path from "node:path";
 import EveryBizVideoCarousel from "../../components/EveryBizVideoCarousel";
 import SiteNav from "../../components/SiteNav";
 import ScrollAutoPlayVideo from "../../components/ScrollAutoPlayVideo";
@@ -12,6 +10,10 @@ import CoastMediaCarousel from "../../components/CoastMediaCarousel";
 import ProductLaunchesBannerRows from "../../components/ProductLaunchesBannerRows";
 import DualRotatingImageColumns from "../../components/DualRotatingImageColumns";
 import { projects } from "../../projects";
+import {
+  cloveProductLaunchColumnOne,
+  cloveProductLaunchPhotos,
+} from "../../generated/media-manifest";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -141,38 +143,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     "/images/clove%202.0/paid.png",
     "/images/clove%202.0/wordle.png",
   ];
-  const cloveProductLaunchPhotos = fs
-    .readdirSync(path.join(process.cwd(), "public", "images", "clove", "product launches"))
-    .filter((file) => /\.(png|jpe?g|webp|gif)$/i.test(file))
-    .sort((a, b) => a.localeCompare(b))
-    .map(
-      (file) =>
-        `/images/clove/${encodeURIComponent("product launches")}/${encodeURIComponent(file)}`
-    );
-  const encodedCloveRootFolder = `/images/${encodeURIComponent("clove")}`;
-  const encodedProductLaunchesFolder = `${encodedCloveRootFolder}/${encodeURIComponent(
-    "product launches"
-  )}`;
-  const encodedCarouselFolder = `${encodedProductLaunchesFolder}/${encodeURIComponent(
-    "carousel in product launches"
-  )}`;
-  const cloveProductLaunchEventsFolder = path.join(
-    process.cwd(),
-    "public",
-    "images",
-    "clove",
-    "product launches",
-    "carousel in product launches",
-    "events"
-  );
-  const cloveProductLaunchColumnOne = fs
-    .readdirSync(cloveProductLaunchEventsFolder)
-    .filter((file) => /\.(png|jpe?g|webp|gif|mp4|webm|ogg)$/i.test(file))
-    .sort((a, b) => a.localeCompare(b))
-    .map(
-      (file) =>
-        `${encodedCarouselFolder}/${encodeURIComponent("events")}/${encodeURIComponent(file)}`
-    );
   const cloveProductLaunchRows = [0, 1, 2].map((rowIndex) =>
     cloveProductLaunchPhotos.filter((_, photoIndex) => photoIndex % 3 === rowIndex)
   );
@@ -288,18 +258,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <h2 className={`-ml-2 text-[clamp(2.5rem,6vw,5.2rem)] font-bold leading-none md:-ml-5 ${headlineFont.className}`}>
               {projectBrand}
             </h2>
-            <p className={`-ml-2 mt-2 text-[clamp(1rem,1.9vw,1.85rem)] leading-[1.1] text-[#dbe8ff]/92 md:-ml-5 ${bodyFont.className}`}>
+            <div className={`-ml-2 mt-2 text-[clamp(1rem,1.9vw,1.85rem)] leading-[1.1] text-[#dbe8ff]/92 md:-ml-5 ${bodyFont.className}`}>
               {projectSubhead}
-            </p>
+            </div>
           </div>
           <div className="max-w-[330px] justify-self-end space-y-5 text-right text-[14px] leading-relaxed text-[#dbe8ff]">
-            <p>Role: {rightMeta.role}</p>
-            <p>
-              Channels: {rightMeta.channels}
-            </p>
-            <p>
-              Collaborating with: {rightMeta.collaborating}
-            </p>
+            <div>Role: {rightMeta.role}</div>
+            <div>Channels: {rightMeta.channels}</div>
+            <div>Collaborating with: {rightMeta.collaborating}</div>
           </div>
         </div>
       </section>
@@ -361,7 +327,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <h3 className={`mb-6 text-left text-[clamp(1.6rem,3.4vw,3rem)] font-bold ${headlineFont.className}`}>
               {isCloveProductLaunches ? "The Campaigns" : "The Campaign"}
             </h3>
-            <p className={`text-left text-[clamp(1rem,1.6vw,1.35rem)] leading-relaxed ${bodyFont.className}`}>
+            <div className={`text-left text-[clamp(1rem,1.6vw,1.35rem)] leading-relaxed ${bodyFont.className}`}>
               {isCloveCoastToCoast
                 ? "After listening closely to its community, Clove launched a reinvented version of its cult-classic sneaker line, preserving what customers loved while thoughtfully addressing what they had asked for. This wasn't just a product update. It was proof that the brand was paying attention."
                 : isCloveProductLaunches
@@ -381,11 +347,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   </>
                 )
                 : "For the first time, this video campaign positioned Justworks as a true all-in-one solution. Rather than marketing PEO, Payroll, and EOR as isolated products, I led the copy strategy to reframe them as a single, cohesive experience built for small business owners."}
-            </p>
+            </div>
             <h3 className={`mt-12 text-left text-[clamp(1.6rem,3.4vw,3rem)] font-bold ${headlineFont.className}`}>
               Our Strategy
             </h3>
-            <p className={`mt-6 text-left text-[clamp(1rem,1.6vw,1.35rem)] leading-relaxed ${bodyFont.className}`}>
+            <div className={`mt-6 text-left text-[clamp(1rem,1.6vw,1.35rem)] leading-relaxed ${bodyFont.className}`}>
               {isCloveCoastToCoast
                 ? "The creative challenge here was a familiar one with higher stakes: how do you excite loyal customers about a product they already own? The answer was honesty. Rather than obscuring the changes behind aspirational language, the copy leaned into the improvements directly, naming each one and explaining what it actually meant for the person wearing them through a twelve-hour shift."
                 : isCloveProductLaunches
@@ -412,8 +378,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 : isRunYourBusiness
                 ? "Rather than glossing over the difficulty of running a business, I leaned into it. By leading with the emotional weight of those challenges, the contrast with Justworks as a solution hit harder. It wasn't just about resolved checklists. It was about the relief of finally having real support."
                 : "As the first campaign of its kind, it came with real creative latitude, and real responsibility. The central challenge was crafting copy that stayed concise and conversational without underselling the breadth of what Justworks offers. I partnered closely with brand and motion graphics designers to develop storyboards and assets that felt polished and intentional, moving viewers fluidly from one feature to the next."}
-            </p>
-            <p className={`mt-8 text-left text-[clamp(1rem,1.6vw,1.35rem)] leading-relaxed ${bodyFont.className}`}>
+            </div>
+            <div className={`mt-8 text-left text-[clamp(1rem,1.6vw,1.35rem)] leading-relaxed ${bodyFont.className}`}>
               {isCloveProductLaunches ? (
                 <>
                   The strategy also had a deeper purpose. By centering real people and genuine stories at the heart of every launch, the work never felt like advertising. It felt like a celebration of the healthcare community itself.
@@ -449,7 +415,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               ) : isRunYourBusiness
                 ? "The work required holding a careful balance: honest enough to resonate with the struggle, optimistic enough to make Justworks feel like the answer owners didn't know they'd been waiting for."
                 : "I partnered closely with our brand designers and motion graphics designers to storyboard and create elevated, sophisticated assets that flawlessly led viewers from one feature to another."}
-            </p>
+            </div>
             {isRunYourBusiness && showVideoCarousel ? (
               <div className="mt-10">
                 <EveryBizVideoCarousel videos={carouselVideos} />
@@ -657,7 +623,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <h3 className={`text-left text-[clamp(1.6rem,3.4vw,3rem)] font-bold ${headlineFont.className}`}>
                 The Result
               </h3>
-              <p className={`mt-8 text-left text-[clamp(1rem,1.6vw,1.35rem)] leading-relaxed ${bodyFont.className}`}>
+              <div className={`mt-8 text-left text-[clamp(1rem,1.6vw,1.35rem)] leading-relaxed ${bodyFont.className}`}>
                 {isCloveCoastToCoast ? (
                   <>
                     The relaunch reinforced Clove as a brand genuinely shaped by its community rather than one that simply marketed to it. Tackling the most-requested fix, quieter outsoles, drove a measurable lift in engagement, sales, and long-term customer retention. It was a reminder that sometimes the strongest campaign insight isn&apos;t a creative leap. It&apos;s simply proving you listened.
@@ -760,13 +726,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     The All-In-One Solution videos ran across CTV, YouTube, LinkedIn, Meta, and Google, strengthening click-through and engagement during historically underperforming months. The work also extended into internal company events and communications.
                   </>
                 )}
-              </p>
+              </div>
               {isRunYourBusiness || isSmallBusinessBigJourney || isCloveSolo || isClaraOne || isCloveCoastToCoast || isCloveProductLaunches || isEveryBusinessStartsSmall ? null : (
-                <p className={`mt-8 pb-6 text-left text-[clamp(1rem,1.6vw,1.35rem)] leading-relaxed ${bodyFont.className}`}>
+                <div className={`mt-8 pb-6 text-left text-[clamp(1rem,1.6vw,1.35rem)] leading-relaxed ${bodyFont.className}`}>
                   {isAllInOne
                     ? "A standout moment: the campaign featured real Justworks customer service representatives, bringing an unexpected human dimension to the brand that hadn't existed before."
                     : "Special shoutout: We got to feature real customer service representatives, humanizing Justworks in a newfound way for the first time."}
-                </p>
+                </div>
               )}
             </section>
             {isRunYourBusiness ? (

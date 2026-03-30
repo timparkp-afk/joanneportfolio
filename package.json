@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "generate:media": "node scripts/generate-media-manifest.mjs",
+    "prebuild": "node scripts/generate-media-manifest.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

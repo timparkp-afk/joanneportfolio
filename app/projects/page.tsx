@@ -149,7 +149,7 @@ export default function ProjectsPage() {
                   <h2 className="text-lg font-bold leading-tight text-white md:text-2xl">
                     {project.title}
                   </h2>
-                  <p className="mt-1 text-sm text-white/90 md:text-base">{project.summary}</p>
+                  <div className="mt-1 text-sm text-white/90 md:text-base">{project.summary}</div>
                 </div>
               </Link>
             );

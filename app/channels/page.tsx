@@ -1,6 +1,5 @@
-import fs from "node:fs";
-import path from "node:path";
 import { Archivo, Bodoni_Moda } from "next/font/google";
+import { channelMediaByFolder } from "../generated/media-manifest";
 import SiteNav from "../components/SiteNav";
 import ChannelAutoCarousel from "../components/ChannelAutoCarousel";
 
@@ -46,23 +45,6 @@ const channelCards: ChannelCard[] = [
   },
 ];
 
-const mediaExtPattern = /\.(mp4|webm|ogg|png|jpe?g|gif|webp)$/i;
-
-function encodePublicAsset(parts: string[]) {
-  return "/" + parts.map((part) => encodeURIComponent(part)).join("/");
-}
-
-function getChannelItems(folder: string) {
-  const absoluteFolder = path.join(process.cwd(), "public", "images", "channels", folder);
-  if (!fs.existsSync(absoluteFolder)) return [];
-
-  return fs
-    .readdirSync(absoluteFolder)
-    .filter((file) => mediaExtPattern.test(file))
-    .sort((a, b) => a.localeCompare(b))
-    .map((file) => encodePublicAsset(["images", "channels", folder, file]));
-}
-
 export default function ChannelsPage() {
   return (
     <main className="relative min-h-screen w-full overflow-x-hidden bg-white px-4 pb-16 pt-24 text-[#0047ff] md:px-8">
@@ -91,7 +73,7 @@ export default function ChannelsPage() {
               </h2>
               <ChannelAutoCarousel
                 ariaLabel={`${channel.label} carousel`}
-                items={getChannelItems(channel.folder)}
+                items={channelMediaByFolder[channel.folder] ?? []}
                 size="large"
                 autoScroll
               />
