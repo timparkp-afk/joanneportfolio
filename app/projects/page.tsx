@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { safeVideoPlay } from "../lib/safeVideoPlay";
 import SiteNav from "../components/SiteNav";
 import { projects } from "../projects";
 
@@ -31,7 +32,6 @@ export default function ProjectsPage() {
                     src={project.image}
                     aria-label={project.title}
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
-                    autoPlay
                     muted
                     loop
                     playsInline
@@ -41,13 +41,14 @@ export default function ProjectsPage() {
                       const loopStart = project.videoLoopStart ?? 0;
                       video.currentTime = loopStart;
                     }}
+                    onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
                     onTimeUpdate={(event) => {
                       const video = event.currentTarget;
                       const loopStart = project.videoLoopStart ?? 0;
                       const loopEnd = project.videoLoopEnd ?? 3;
                       if (video.currentTime >= loopEnd) {
                         video.currentTime = loopStart;
-                        void video.play();
+                        safeVideoPlay(video);
                       }
                     }}
                   />

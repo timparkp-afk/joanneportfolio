@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { safeVideoPlay } from "../lib/safeVideoPlay";
 
 type EveryBizVideoCarouselProps = {
   videos: string[];
@@ -91,12 +92,12 @@ export default function EveryBizVideoCarousel({ videos }: EveryBizVideoCarouselP
               src={videoSrc}
               className="aspect-video w-[78vw] max-w-[560px] shrink-0 snap-start rounded-xl border border-white/20 object-cover md:w-[44vw]"
               aria-label={`Every Biz video ${index + 1}`}
-              autoPlay
               muted
               loop
               playsInline
               preload="metadata"
               controls
+              onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
             />
           ))}
         </div>

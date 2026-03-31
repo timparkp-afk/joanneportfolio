@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Archivo, Bodoni_Moda } from "next/font/google";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import type { CSSProperties } from "react";
+import { safeVideoPlay } from "./lib/safeVideoPlay";
 
 function useMediaMinLg() {
   return useSyncExternalStore(
@@ -676,11 +677,11 @@ export default function Home() {
                       src={item.image}
                       aria-label={item.label}
                       className="h-full w-full object-cover shadow-[0_18px_48px_rgba(0,0,0,0.22)]"
-                      autoPlay
                       muted
                       loop
                       playsInline
                       preload="metadata"
+                      onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
                     />
                   ) : (
                     <img
@@ -777,13 +778,27 @@ export default function Home() {
       </section>
 
       <section ref={carouselSectionRef} className="relative z-50 w-full overflow-hidden bg-transparent pb-24">
+        <div className="px-3 pt-20 md:px-6 lg:pt-24">
+          <div className="mb-2 flex justify-end lg:hidden">
+            <span
+              className={`inline-flex items-center gap-[8px] text-sm font-medium tracking-wide text-[#0047ff] ${navFont.className}`}
+              aria-label="Scroll horizontally to browse projects"
+            >
+              <span>Scroll</span>
+              <span aria-hidden className="select-none">
+                →
+              </span>
+            </span>
+          </div>
+        </div>
         <div
           ref={carouselTrackRef}
-          className="scroll-px-3 overflow-x-auto overscroll-x-contain px-3 pb-6 pt-20 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:px-6 md:pt-24 md:scroll-px-6"
+          className="scroll-px-3 overflow-x-auto overscroll-x-contain px-3 pb-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:px-6 md:scroll-px-6"
         >
           <div className="flex w-max min-w-full snap-x snap-mandatory gap-4 scroll-smooth md:gap-6">
             <div aria-hidden="true" className="shrink-0 max-lg:w-0 lg:w-[44vw]" />
             {galleryProjects.map((project, index) => {
+              const carouselStatic = !isLg;
               const focusedByScroll = carouselFocus[index] ?? 0;
               const revealRaw = (focusedByScroll - 0.12) / 0.88;
               const baseReveal = Math.min(1, Math.max(0, revealRaw));
@@ -791,16 +806,20 @@ export default function Home() {
                 index === 0 && isLg
                   ? Math.min(1, Math.max(0, (carouselScrollLeft - 40) / 180))
                   : 1;
-              const reveal = baseReveal * firstCardGate;
+              const reveal = carouselStatic ? 1 : baseReveal * firstCardGate;
               const isSoloCard = project.title === "Clove: SOLO";
               const isCoastCard = project.title === "Clove: 2.0";
               const isClaraCard = project.title === "Clove: The Clara 1";
               const textRevealRaw = (reveal - 0.62) / 0.28;
               const textRevealClamped = Math.min(1, Math.max(0, textRevealRaw));
-              const textReveal =
-                textRevealClamped * textRevealClamped * (3 - 2 * textRevealClamped);
-              const imageLift = 78 * reveal;
-              const textLiftIntoGap = 70 * textReveal;
+              const textReveal = carouselStatic
+                ? 1
+                : textRevealClamped * textRevealClamped * (3 - 2 * textRevealClamped);
+              const imageLift = carouselStatic ? 0 : 78 * reveal;
+              const textLiftIntoGap = carouselStatic ? 0 : 70 * textReveal;
+              const mediaBrightness = carouselStatic
+                ? 0.9
+                : 0.5 + focusedByScroll * 0.4;
               const isVideo = project.image.toLowerCase().endsWith(".mp4");
 
               return (
@@ -817,36 +836,36 @@ export default function Home() {
                   }}
                 >
                   <div
-                    className="relative overflow-hidden rounded-2xl border border-white/35 bg-white shadow-[0_14px_36px_rgba(255,90,0,0.2)] will-change-transform"
+                    className={`relative overflow-hidden rounded-2xl border border-white/35 bg-white shadow-[0_14px_36px_rgba(255,90,0,0.2)] ${isLg ? "will-change-transform" : ""}`}
                     style={{
                       transform: `translateY(${-imageLift}px)`,
-                      transition: "transform 280ms ease-out",
+                      transition: isLg ? "transform 280ms ease-out" : "none",
                     }}
                   >
                     {isVideo ? (
                       <video
                         src={project.image}
                         aria-label={project.title}
-                        autoPlay
                         muted
                         playsInline
                         preload="metadata"
                         className="aspect-[16/10] h-full w-full rounded-t-2xl object-cover transition duration-300 ease-out"
                         style={{
-                          filter: `brightness(${0.5 + focusedByScroll * 0.4})`,
+                          filter: `brightness(${mediaBrightness})`,
                         }}
                         onLoadedMetadata={(event) => {
                           const video = event.currentTarget;
                           const loopStart = project.videoLoopStart ?? 0;
                           video.currentTime = loopStart;
                         }}
+                        onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
                         onTimeUpdate={(event) => {
                           const video = event.currentTarget;
                           const loopStart = project.videoLoopStart ?? 0;
                           const loopEnd = project.videoLoopEnd ?? 3;
                           if (video.currentTime >= loopEnd) {
                             video.currentTime = loopStart;
-                            void video.play();
+                            safeVideoPlay(video);
                           }
                         }}
                       />
@@ -856,7 +875,7 @@ export default function Home() {
                         alt={project.title}
                         className="aspect-[16/10] h-full w-full rounded-t-2xl object-cover transition duration-300 ease-out"
                         style={{
-                          filter: `brightness(${0.5 + focusedByScroll * 0.4})`,
+                          filter: `brightness(${mediaBrightness})`,
                           objectPosition: isSoloCard
                             ? "82% center"
                             : isCoastCard
@@ -874,7 +893,9 @@ export default function Home() {
                     style={{
                       opacity: textReveal,
                       transform: `translateY(${(1 - textReveal) * 34 - textLiftIntoGap}px)`,
-                      transition: "opacity 280ms ease-out, transform 280ms ease-out",
+                      transition: isLg
+                        ? "opacity 280ms ease-out, transform 280ms ease-out"
+                        : "none",
                     }}
                   >
                     <h3 className={`text-xl font-bold text-[#0047ff] md:text-3xl ${headlineFont.className}`}>

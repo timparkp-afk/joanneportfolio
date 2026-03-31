@@ -5,6 +5,7 @@ import {
   subscribeChannelCarousel,
   unsubscribeChannelCarousel,
 } from "../lib/channelCarouselTicker";
+import { safeVideoPlay } from "../lib/safeVideoPlay";
 
 type ChannelAutoCarouselProps = {
   items: string[];
@@ -72,7 +73,7 @@ export default function ChannelAutoCarousel({
       list.forEach((v) => {
         if (!videoAutoplay) return;
         if (visible) {
-          void v.play().catch(() => {});
+          safeVideoPlay(v);
         } else {
           v.pause();
         }
@@ -134,7 +135,6 @@ export default function ChannelAutoCarousel({
                     aria-label="Channel sample"
                     className="h-full w-full object-contain"
                     controls={!videoAutoplay}
-                    autoPlay={videoAutoplay}
                     muted={videoAutoplay}
                     loop={videoAutoplay}
                     playsInline

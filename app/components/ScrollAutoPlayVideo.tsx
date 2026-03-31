@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { safeVideoPlay } from "../lib/safeVideoPlay";
 
 type ScrollAutoPlayVideoProps = {
   src: string;
@@ -24,7 +25,7 @@ export default function ScrollAutoPlayVideo({
         entries.forEach((entry) => {
           if (!video) return;
           if (entry.isIntersecting) {
-            void video.play();
+            safeVideoPlay(video);
           } else {
             video.pause();
           }

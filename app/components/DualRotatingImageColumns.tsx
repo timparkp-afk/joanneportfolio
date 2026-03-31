@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { safeVideoPlay } from "../lib/safeVideoPlay";
 
 type DualRotatingImageColumnsProps = {
   images: string[];
@@ -92,11 +93,11 @@ export default function DualRotatingImageColumns({
                     src={src}
                     aria-label={`Launch visual ${index + 1}`}
                     className="h-full w-full object-contain p-2"
-                    autoPlay
                     muted
                     loop
                     playsInline
                     preload="metadata"
+                    onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
                   />
                 ) : (
                   <img

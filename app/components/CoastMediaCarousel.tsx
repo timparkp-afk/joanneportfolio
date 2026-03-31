@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { safeVideoPlay } from "../lib/safeVideoPlay";
 
 type CoastMediaCarouselProps = {
   media: string[];
@@ -84,11 +85,11 @@ export default function CoastMediaCarousel({ media }: CoastMediaCarouselProps) {
                 <video
                   src={src}
                   className="h-full w-full object-contain"
-                  autoPlay
                   muted
                   loop
                   playsInline
                   preload="metadata"
+                  onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
                 />
               ) : (
                 <img

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { safeVideoPlay } from "../lib/safeVideoPlay";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Archivo, Bodoni_Moda } from "next/font/google";
@@ -445,7 +446,6 @@ export default function AboutPage() {
                       <video
                         src={project.image}
                         aria-label={project.title}
-                        autoPlay
                         muted
                         playsInline
                         preload="metadata"
@@ -458,13 +458,14 @@ export default function AboutPage() {
                           const loopStart = project.videoLoopStart ?? 0;
                           video.currentTime = loopStart;
                         }}
+                        onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
                         onTimeUpdate={(event) => {
                           const video = event.currentTarget;
                           const loopStart = project.videoLoopStart ?? 0;
                           const loopEnd = project.videoLoopEnd ?? 3;
                           if (video.currentTime >= loopEnd) {
                             video.currentTime = loopStart;
-                            void video.play();
+                            safeVideoPlay(video);
                           }
                         }}
                       />
