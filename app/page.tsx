@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Archivo, Bodoni_Moda } from "next/font/google";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import type { CSSProperties } from "react";
+import HomeGalleryCarouselVideo from "./components/HomeGalleryCarouselVideo";
 import { publicAssetUrl } from "./lib/publicAssetUrl";
 import { safeVideoPlay } from "./lib/safeVideoPlay";
 import { seekVideoPreviewFrame } from "./lib/seekVideoPreviewFrame";
@@ -92,7 +93,7 @@ export default function Home() {
       {
         title: "Justworks: Every Business Starts Small",
         subtitle: "Brand awareness campaign bringing customer stories to life",
-        image: "/images/EVERY%20BIZ/jw1.jpg",
+        image: "/images/EVERY%20BIZ/jw_thejourney_30_16x9_v2%20(1080p).mp4",
         href: "/projects/justworks-every-business-starts-small",
       },
       {
@@ -672,8 +673,14 @@ export default function Home() {
             </span>
           </div>
 
-          {/* Mobile: stable grid — desktop tetris % layout breaks on narrow viewports */}
-          <div className="relative z-30 w-full px-4 sm:px-5 lg:hidden">
+          {/* Mobile: "writing for" above bento (desktop keeps split writing / for) */}
+          <div className="relative z-30 flex w-full flex-col gap-3 px-4 sm:px-5 lg:hidden">
+            <span
+              className={`pl-0 text-[clamp(2.4rem,11vw,4.5rem)] font-semibold leading-none text-[#0047ff] ${headlineFont.className}`}
+              aria-hidden={true}
+            >
+              writing for
+            </span>
             <div className="mx-auto grid w-full max-w-lg grid-cols-2 gap-2 sm:gap-3">
               {channelTunnelItems.map((item, index) => {
                 const isVideoAsset = item.image.toLowerCase().endsWith(".mp4");
@@ -917,30 +924,14 @@ export default function Home() {
                     }}
                   >
                     {isVideo ? (
-                      <video
+                      <HomeGalleryCarouselVideo
                         src={project.image}
-                        aria-label={project.title}
-                        muted
-                        playsInline
-                        preload="auto"
+                        ariaLabel={project.title}
+                        videoLoopStart={project.videoLoopStart}
+                        videoLoopEnd={project.videoLoopEnd}
                         className="aspect-[16/10] h-full w-full rounded-t-2xl object-cover transition duration-300 ease-out"
                         style={{
                           filter: `brightness(${mediaBrightness})`,
-                        }}
-                        onLoadedMetadata={(event) => {
-                          const video = event.currentTarget;
-                          const loopStart = project.videoLoopStart ?? 0;
-                          seekVideoPreviewFrame(video, loopStart);
-                        }}
-                        onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
-                        onTimeUpdate={(event) => {
-                          const video = event.currentTarget;
-                          const loopStart = project.videoLoopStart ?? 0;
-                          const loopEnd = project.videoLoopEnd ?? 3;
-                          if (video.currentTime >= loopEnd) {
-                            video.currentTime = loopStart;
-                            safeVideoPlay(video);
-                          }
                         }}
                       />
                     ) : (
