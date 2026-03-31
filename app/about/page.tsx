@@ -1,9 +1,10 @@
- "use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Archivo, Bodoni_Moda } from "next/font/google";
+import SiteNav from "../components/SiteNav";
 
 type GalleryProject = {
   title: string;
@@ -16,11 +17,6 @@ type GalleryProject = {
 
 const heroSans = Archivo({
   weight: ["700"],
-  subsets: ["latin"],
-});
-
-const navFont = Archivo({
-  weight: ["500", "600"],
   subsets: ["latin"],
 });
 
@@ -93,61 +89,17 @@ export default function AboutPage() {
     []
   );
 
-  const typingPhrases = useMemo(
-    () => [
-      "is a copywriter in NYC",
-      "leads copy for nationwide campaigns",
-      "is a free verse poet",
-      "loves Ocean Vuong and Claudia Rankine",
-      "is the spreadsheet queen",
-      "vibe coded this website",
-      "was a florist in her past life",
-    ],
-    []
-  );
-
-  const [typedText, setTypedText] = useState("");
-  const [phraseIndex, setPhraseIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [storyPhraseFill, setStoryPhraseFill] = useState(0);
   const [storyOutroFill, setStoryOutroFill] = useState(0);
   const [carouselFocus, setCarouselFocus] = useState<Record<number, number>>({});
   const [carouselScrollLeft, setCarouselScrollLeft] = useState(0);
+  const [isLg, setIsLg] = useState(false);
   const storyPhraseRef = useRef<HTMLSpanElement | null>(null);
   const storyOutroRef = useRef<HTMLSpanElement | null>(null);
   const carouselSectionRef = useRef<HTMLElement | null>(null);
   const carouselTrackRef = useRef<HTMLDivElement | null>(null);
   const carouselCardRefs = useRef<Array<HTMLAnchorElement | null>>([]);
-
-  useEffect(() => {
-    const currentPhrase = typingPhrases[phraseIndex];
-    const isComplete = typedText === currentPhrase;
-    const isEmpty = typedText.length === 0;
-
-    if (isComplete && !isDeleting) {
-      const timer = window.setTimeout(() => setIsDeleting(true), 1000);
-      return () => window.clearTimeout(timer);
-    }
-
-    if (isEmpty && isDeleting) {
-      const timer = window.setTimeout(() => {
-        setIsDeleting(false);
-        setPhraseIndex((idx) => (idx + 1) % typingPhrases.length);
-      }, 220);
-      return () => window.clearTimeout(timer);
-    }
-
-    const timeout = window.setTimeout(() => {
-      setTypedText((current) =>
-        isDeleting
-          ? current.slice(0, Math.max(0, current.length - 1))
-          : currentPhrase.slice(0, current.length + 1)
-      );
-    }, isDeleting ? 45 : 70);
-
-    return () => window.clearTimeout(timeout);
-  }, [typedText, isDeleting, phraseIndex, typingPhrases]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -170,6 +122,14 @@ export default function AboutPage() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const sync = () => setIsLg(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
   }, []);
 
   useEffect(() => {
@@ -263,43 +223,14 @@ export default function AboutPage() {
   const colorFloodOpacity = spotDepth * 0.96;
   const storyEmojiReveal = Math.max(0, Math.min(1, (storyOutroFill - 0.62) / 0.38));
 
+  const portraitFrameStyle = {
+    opacity: introOpacity,
+    transform: `translate3d(0, ${imageParallax - introExitProgress * 64}px, 0) scale(${1 - introExitProgress * 0.05})`,
+  };
+
   return (
-    <main className="relative min-h-screen w-full overflow-x-hidden bg-white px-4 pb-8 pt-6 text-[#0047ff] md:px-8 md:pt-8">
-      <nav
-        className={`fixed left-0 top-0 z-50 flex w-full items-start justify-between px-3 py-2 text-base tracking-wide text-[#0047ff] md:px-5 md:py-3 md:text-lg ${navFont.className}`}
-      >
-        <Link href="/" className="inline-flex items-center gap-2 normal-case">
-          <span className="font-extrabold">Joanne</span>
-          <span className="hidden normal-case md:inline">{typedText}</span>
-          <span className="hidden animate-pulse md:inline">|</span>
-        </Link>
-        <div className="flex items-center gap-4 uppercase md:gap-6">
-          <Link
-            href="/about"
-            className="rounded-full border border-white/60 bg-white/25 px-3.5 py-1.5 text-sm shadow-[0_8px_24px_rgba(255,255,255,0.35),0_8px_20px_rgba(0,71,255,0.2)] backdrop-blur-xl md:px-4 md:py-1.5 md:text-base"
-          >
-            about
-          </Link>
-          <Link
-            href="/projects"
-            className="rounded-full border border-white/60 bg-white/25 px-3.5 py-1.5 text-sm shadow-[0_8px_24px_rgba(255,255,255,0.35),0_8px_20px_rgba(0,71,255,0.2)] backdrop-blur-xl md:px-4 md:py-1.5 md:text-base"
-          >
-            projects
-          </Link>
-          <Link
-            href="/channels"
-            className="rounded-full border border-white/60 bg-white/25 px-3.5 py-1.5 text-sm shadow-[0_8px_24px_rgba(255,255,255,0.35),0_8px_20px_rgba(0,71,255,0.2)] backdrop-blur-xl md:px-4 md:py-1.5 md:text-base"
-          >
-            channels
-          </Link>
-          <a
-            href="https://mail.google.com/mail/?view=cm&fs=1&to=johwangbo@gmail.com"
-            className="rounded-full border border-white/60 bg-white/25 px-3.5 py-1.5 text-sm shadow-[0_8px_24px_rgba(255,255,255,0.35),0_8px_20px_rgba(0,71,255,0.2)] backdrop-blur-xl md:px-4 md:py-1.5 md:text-base"
-          >
-            contact
-          </a>
-        </div>
-      </nav>
+    <main className="relative min-h-screen w-full overflow-x-hidden bg-white px-4 pb-8 pt-[9.5rem] text-[#0047ff] md:px-8 md:pt-24">
+      <SiteNav />
 
       <div
         aria-hidden="true"
@@ -324,13 +255,10 @@ export default function AboutPage() {
       </div>
 
       <div className="relative z-10 mx-auto mt-16 grid w-full max-w-[1500px] grid-cols-1 gap-8 md:mt-20 lg:min-h-[92vh] lg:grid-cols-[43%_57%]">
-        <section className="order-2 flex min-h-[420px] flex-col justify-start lg:order-1 lg:min-h-[86vh] lg:self-start">
+        <section className="hidden flex-col justify-start lg:flex lg:order-1 lg:min-h-[86vh] lg:self-start">
           <div
             className="relative aspect-square w-[72%] max-w-[420px] overflow-hidden border border-[#0047ff]/22 bg-white/78 shadow-[0_28px_52px_rgba(0,71,255,0.18)] backdrop-blur-sm md:w-[68%] lg:mt-36"
-            style={{
-              opacity: introOpacity,
-              transform: `translate3d(0, ${imageParallax - introExitProgress * 64}px, 0) scale(${1 - introExitProgress * 0.05})`,
-            }}
+            style={portraitFrameStyle}
           >
             <Image
               src="/images/me.png"
@@ -349,10 +277,11 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="order-1 flex flex-col justify-center lg:order-2">
+        <section className="flex flex-col justify-center lg:order-2">
           <div style={{ transform: `translate3d(0, ${textParallax}px, 0)` }}>
+            <div className="min-w-0">
             <p
-              className={`about-headline-line about-headline-line-1 -ml-16 text-[clamp(2.8rem,9.6vw,9.6rem)] font-bold leading-[0.88] tracking-[-0.035em] md:-ml-28 lg:-ml-36 ${heroSans.className}`}
+              className={`about-headline-line about-headline-line-1 ml-0 max-w-full text-[clamp(2.8rem,9.6vw,9.6rem)] font-bold leading-[0.88] tracking-[-0.035em] lg:-ml-36 ${heroSans.className}`}
               style={{
                 opacity: introOpacity,
                 transform: `translate3d(0, ${-introExitProgress * 40}px, 0)`,
@@ -361,7 +290,7 @@ export default function AboutPage() {
               Hi! Welcome home.
             </p>
             <p
-              className={`about-headline-line about-headline-line-2 mt-10 ml-auto w-fit pr-4 text-right text-[clamp(2.8rem,9.6vw,9.6rem)] font-bold leading-[0.88] tracking-[-0.035em] md:pr-8 lg:pr-12 ${heroSans.className}`}
+              className={`about-headline-line about-headline-line-2 mt-6 ml-0 w-full text-left text-[clamp(2.8rem,9.6vw,9.6rem)] font-bold leading-[0.88] tracking-[-0.035em] lg:mt-10 lg:ml-auto lg:w-fit lg:text-right lg:pr-12 ${heroSans.className}`}
               style={{
                 opacity: introOpacity,
                 transform: `translate3d(0, ${-introExitProgress * 34}px, 0)`,
@@ -370,15 +299,41 @@ export default function AboutPage() {
               It&apos;s me,
             </p>
             <p
-              className={`about-headline-line mt-4 ml-auto w-fit pr-4 text-right text-[clamp(3.2rem,10.8vw,11rem)] font-bold leading-[0.86] tracking-[-0.04em] md:pr-8 lg:pr-12 lg:sticky lg:top-28 ${heroSans.className}`}
+              className={`about-headline-line mt-4 ml-0 w-full text-left text-[clamp(2.8rem,9.6vw,9.6rem)] font-bold leading-[0.88] tracking-[-0.035em] lg:ml-auto lg:w-fit lg:text-right lg:pr-12 lg:text-[clamp(3.2rem,10.8vw,11rem)] lg:leading-[0.86] lg:tracking-[-0.04em] lg:sticky lg:top-28 ${heroSans.className}`}
               style={{
-                transform: `translate3d(${-96 * joanneTravelProgress}vw, 0, 0)`,
+                transform: isLg
+                  ? `translate3d(${-96 * joanneTravelProgress}vw, 0, 0)`
+                  : undefined,
               }}
             >
               Joanne.
             </p>
+            </div>
 
-            <div className="mt-20 max-w-2xl pt-8">
+            <div className="mt-8 w-full min-w-0 lg:hidden">
+              <div
+                className="relative mx-auto aspect-square w-full max-w-[420px] overflow-hidden border border-[#0047ff]/22 bg-white/78 shadow-[0_28px_52px_rgba(0,71,255,0.18)] backdrop-blur-sm"
+                style={portraitFrameStyle}
+              >
+                <Image
+                  src="/images/me.png"
+                  alt=""
+                  width={960}
+                  height={1200}
+                  className="h-full w-full object-cover object-center"
+                  aria-hidden
+                  role="presentation"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(255,255,255,0.16)_0%,rgba(255,255,255,0)_40%)]" />
+              </div>
+              <div className={`mt-3 flex items-center text-[11px] uppercase tracking-[0.18em] md:text-xs ${accentSerif.className}`}>
+                <span className="about-float-label" style={{ transform: `translateY(${-10 + labelFloat * 10}px)` }}>
+                  Based in New York City
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-12 max-w-2xl pt-2 md:mt-20 md:pt-8">
               <p className={`about-headline-line about-headline-line-3 mt-2 max-w-3xl text-[clamp(1.35rem,3.2vw,2.4rem)] font-bold leading-[1.2] tracking-[-0.02em] ${heroSans.className}`}>
                 My writing is personal and concise.
               </p>

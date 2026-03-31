@@ -2,8 +2,20 @@
 
 import Link from "next/link";
 import { Archivo, Bodoni_Moda } from "next/font/google";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import type { CSSProperties } from "react";
+
+function useMediaMinLg() {
+  return useSyncExternalStore(
+    (onStoreChange) => {
+      const mq = window.matchMedia("(min-width: 1024px)");
+      mq.addEventListener("change", onStoreChange);
+      return () => mq.removeEventListener("change", onStoreChange);
+    },
+    () => window.matchMedia("(min-width: 1024px)").matches,
+    () => true
+  );
+}
 
 const navFont = Archivo({
   weight: ["500", "600"],
@@ -190,6 +202,8 @@ export default function Home() {
   const [storyHighlightProgress, setStoryHighlightProgress] = useState(0);
   const [activeLogoIndex, setActiveLogoIndex] = useState(0);
   const [channelTunnelProgress, setChannelTunnelProgress] = useState(0);
+  const isLg = useMediaMinLg();
+  const channelTunnelEffectiveProgress = isLg ? channelTunnelProgress : 1;
   const [carouselFocus, setCarouselFocus] = useState<Record<number, number>>({});
   const [carouselScrollLeft, setCarouselScrollLeft] = useState(0);
 
@@ -204,8 +218,8 @@ export default function Home() {
   const carouselCardRefs = useRef<Array<HTMLAnchorElement | null>>([]);
 
   useEffect(() => {
-    channelTunnelProgressRef.current = channelTunnelProgress;
-  }, [channelTunnelProgress]);
+    channelTunnelProgressRef.current = isLg ? channelTunnelProgress : 1;
+  }, [channelTunnelProgress, isLg]);
 
   useEffect(() => {
     const currentPhrase = typingPhrases[phraseIndex];
@@ -347,6 +361,7 @@ export default function Home() {
 
   useEffect(() => {
     const syncBoundaryProgress = () => {
+      if (!window.matchMedia("(min-width: 1024px)").matches) return;
       const section = channelTunnelSectionRef.current;
       if (!section) return;
       const rect = section.getBoundingClientRect();
@@ -371,6 +386,7 @@ export default function Home() {
 
   useEffect(() => {
     const onWheel = (event: WheelEvent) => {
+      if (!window.matchMedia("(min-width: 1024px)").matches) return;
       const section = channelTunnelSectionRef.current;
       if (!section) return;
 
@@ -438,6 +454,7 @@ export default function Home() {
 
   useEffect(() => {
     const onWheel = (event: WheelEvent) => {
+      if (!window.matchMedia("(min-width: 1024px)").matches) return;
       const section = carouselSectionRef.current;
       const track = carouselTrackRef.current;
       if (!section || !track) return;
@@ -593,10 +610,14 @@ export default function Home() {
 
       <section
         ref={channelTunnelSectionRef}
-        className="relative z-40 w-full"
-        style={{ height: "100vh" }}
+        className={`relative z-40 w-full ${isLg ? "" : "h-auto py-10"}`}
+        style={isLg ? { height: "100vh" } : undefined}
       >
-        <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden">
+        <div
+          className={`flex w-full items-center justify-center overflow-hidden ${
+            isLg ? "sticky top-0 h-screen" : "relative min-h-0 py-4"
+          }`}
+        >
           <div
             aria-hidden="true"
             className={`pointer-events-none absolute inset-0 z-20 text-[#0047ff]/70 ${headlineFont.className}`}
@@ -608,14 +629,18 @@ export default function Home() {
               for
             </span>
           </div>
-          <div className="relative h-[min(72vh,680px)] w-[min(78vw,760px)] translate-y-[4vh] md:translate-y-[3vh]">
+          <div
+            className={`relative h-[min(72vh,680px)] w-[min(78vw,760px)] ${
+              isLg ? "translate-y-[4vh] md:translate-y-[3vh]" : "translate-y-0"
+            }`}
+          >
             {channelTunnelItems.map((item, index) => {
               const slot = channelTetrisSlots[index];
               const spawn = channelTetrisSpawns[index];
               if (!slot || !spawn) return null;
               const isVideo = item.image.toLowerCase().endsWith(".mp4");
 
-              const sequence = channelTunnelProgress * channelTunnelItems.length;
+              const sequence = channelTunnelEffectiveProgress * channelTunnelItems.length;
               const cardProgress = Math.min(1, Math.max(0, sequence - index));
               const inPlay = cardProgress > 0 || index <= Math.floor(sequence);
               if (!inPlay) return null;
@@ -667,7 +692,7 @@ export default function Home() {
                       }}
                     />
                   )}
-                  <p className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-black/68 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.14em] text-white md:bottom-3 md:text-sm">
+                  <p className="pointer-events-none absolute bottom-2 left-1/2 z-10 inline-flex max-w-[calc(100%-0.75rem)] -translate-x-1/2 items-center justify-center whitespace-nowrap rounded-full bg-black/68 px-[0.55em] py-[0.35em] text-[0.65rem] font-bold uppercase leading-none tracking-[0.06em] text-white sm:text-[0.68rem] md:bottom-3 md:px-[0.65em] md:py-[0.4em] md:text-sm md:tracking-[0.1em]">
                     {item.label}
                   </p>
                 </div>
@@ -752,17 +777,20 @@ export default function Home() {
       </section>
 
       <section ref={carouselSectionRef} className="relative z-50 w-full overflow-hidden bg-transparent pb-24">
-        <div ref={carouselTrackRef} className="overflow-x-auto px-3 pb-6 pt-20 md:px-6 md:pt-24">
-          <div
-            className="flex w-max min-w-full snap-x snap-mandatory gap-4 scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:gap-6"
-          >
-            <div aria-hidden="true" className="w-[70vw] shrink-0 md:w-[54vw] lg:w-[44vw]" />
+        <div
+          ref={carouselTrackRef}
+          className="scroll-px-3 overflow-x-auto overscroll-x-contain px-3 pb-6 pt-20 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:px-6 md:pt-24 md:scroll-px-6"
+        >
+          <div className="flex w-max min-w-full snap-x snap-mandatory gap-4 scroll-smooth md:gap-6">
+            <div aria-hidden="true" className="shrink-0 max-lg:w-0 lg:w-[44vw]" />
             {galleryProjects.map((project, index) => {
               const focusedByScroll = carouselFocus[index] ?? 0;
               const revealRaw = (focusedByScroll - 0.12) / 0.88;
               const baseReveal = Math.min(1, Math.max(0, revealRaw));
               const firstCardGate =
-                index === 0 ? Math.min(1, Math.max(0, (carouselScrollLeft - 40) / 180)) : 1;
+                index === 0 && isLg
+                  ? Math.min(1, Math.max(0, (carouselScrollLeft - 40) / 180))
+                  : 1;
               const reveal = baseReveal * firstCardGate;
               const isSoloCard = project.title === "Clove: SOLO";
               const isCoastCard = project.title === "Clove: 2.0";
@@ -782,7 +810,7 @@ export default function Home() {
                     carouselCardRefs.current[index] = element;
                   }}
                   href={project.href}
-                  className="group relative w-[79vw] shrink-0 snap-center overflow-visible md:w-[58vw] lg:w-[47vw]"
+                  className="group relative w-[calc(100vw-1.5rem)] shrink-0 snap-start overflow-visible lg:w-[47vw] lg:snap-center"
                   style={{
                     animationDelay: `${index * 80}ms`,
                     scrollSnapStop: "always",
@@ -859,7 +887,7 @@ export default function Home() {
                 </Link>
               );
             })}
-            <div aria-hidden="true" className="w-[70vw] shrink-0 md:w-[54vw] lg:w-[44vw]" />
+            <div aria-hidden="true" className="shrink-0 max-lg:w-0 lg:w-[44vw]" />
           </div>
         </div>
       </section>

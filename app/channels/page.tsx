@@ -47,7 +47,7 @@ const channelCards: ChannelCard[] = [
 
 export default function ChannelsPage() {
   return (
-    <main className="relative min-h-screen w-full overflow-x-hidden bg-white px-4 pb-16 pt-24 text-[#0047ff] md:px-8">
+    <main className="relative min-h-screen w-full overflow-x-hidden bg-white px-4 pb-16 pt-[9.5rem] text-[#0047ff] md:px-8 md:pt-24">
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0">
         <div className="ombre-spot ombre-spot-pink ombre-drift-one" />
         <div className="ombre-spot ombre-spot-pink-soft ombre-drift-two" />
@@ -57,7 +57,7 @@ export default function ChannelsPage() {
 
       <SiteNav />
 
-      <section className="relative z-10 mx-auto mt-14 max-w-6xl">
+      <section className="relative z-10 mx-auto mt-6 max-w-6xl md:mt-14">
         <h1
           className={`whitespace-nowrap text-[clamp(1.45rem,4.6vw,4.4rem)] tracking-tight ${headlineFont.className}`}
         >

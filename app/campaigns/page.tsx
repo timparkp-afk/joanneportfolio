@@ -1,4 +1,4 @@
-import Link from "next/link";
+import SiteNav from "../components/SiteNav";
 
 type CampaignCard = {
   name: string;
@@ -48,15 +48,10 @@ const campaignCards: CampaignCard[] = [
 
 export default function CampaignsPage() {
   return (
-    <main className="mx-auto min-h-screen w-full max-w-6xl px-6 py-10 text-[#0047ff]">
-      <header className="mb-10 flex items-center justify-between text-sm font-medium uppercase tracking-wide">
-        <Link href="/">Joanne</Link>
-        <div className="flex items-center gap-8">
-          <Link href="/about">About</Link>
-          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=johwangbo@gmail.com">Contact</a>
-        </div>
-      </header>
+    <main className="relative mx-auto min-h-screen w-full max-w-6xl px-4 pb-10 pt-[9.5rem] text-[#0047ff] md:px-6 md:pb-10 md:pt-24">
+      <SiteNav />
 
+      <div className="relative z-10">
       <section className="mb-10 space-y-2">
         <h1 className="text-3xl font-semibold md:text-5xl">Campaigns</h1>
         <p className="text-sm md:text-base">
@@ -85,6 +80,7 @@ export default function CampaignsPage() {
           </a>
         ))}
       </section>
+      </div>
     </main>
   );
 }
