@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { safeVideoPlay } from "../lib/safeVideoPlay";
+import { seekVideoPreviewFrame } from "../lib/seekVideoPreviewFrame";
 import SiteNav from "../components/SiteNav";
 import { projects } from "../projects";
 
@@ -35,11 +36,11 @@ export default function ProjectsPage() {
                     muted
                     loop
                     playsInline
-                    preload="metadata"
+                    preload="auto"
                     onLoadedMetadata={(event) => {
                       const video = event.currentTarget;
                       const loopStart = project.videoLoopStart ?? 0;
-                      video.currentTime = loopStart;
+                      seekVideoPreviewFrame(video, loopStart);
                     }}
                     onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
                     onTimeUpdate={(event) => {

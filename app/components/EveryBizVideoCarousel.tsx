@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { safeVideoPlay } from "../lib/safeVideoPlay";
+import { seekVideoPreviewFrame } from "../lib/seekVideoPreviewFrame";
 
 type EveryBizVideoCarouselProps = {
   videos: string[];
@@ -95,8 +96,9 @@ export default function EveryBizVideoCarousel({ videos }: EveryBizVideoCarouselP
               muted
               loop
               playsInline
-              preload="metadata"
+              preload="auto"
               controls
+              onLoadedMetadata={(event) => seekVideoPreviewFrame(event.currentTarget, 0)}
               onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
             />
           ))}

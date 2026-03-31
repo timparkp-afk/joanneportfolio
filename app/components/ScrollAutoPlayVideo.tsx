@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { safeVideoPlay } from "../lib/safeVideoPlay";
+import { seekVideoPreviewFrame } from "../lib/seekVideoPreviewFrame";
 
 type ScrollAutoPlayVideoProps = {
   src: string;
@@ -47,7 +48,8 @@ export default function ScrollAutoPlayVideo({
       muted
       playsInline
       loop
-      preload="metadata"
+      preload="auto"
+      onLoadedMetadata={(e) => seekVideoPreviewFrame(e.currentTarget, 0)}
     />
   );
 }

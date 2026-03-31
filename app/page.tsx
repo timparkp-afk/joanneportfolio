@@ -4,7 +4,48 @@ import Link from "next/link";
 import { Archivo, Bodoni_Moda } from "next/font/google";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import type { CSSProperties } from "react";
+import { publicAssetUrl } from "./lib/publicAssetUrl";
 import { safeVideoPlay } from "./lib/safeVideoPlay";
+import { seekVideoPreviewFrame } from "./lib/seekVideoPreviewFrame";
+
+function MobileBentoVideo({ src, label }: { src: string; label: string }) {
+  const ref = useRef<HTMLVideoElement | null>(null);
+  const url = useMemo(() => publicAssetUrl(src), [src]);
+
+  useEffect(() => {
+    const video = ref.current;
+    if (!video) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            safeVideoPlay(video);
+          } else {
+            video.pause();
+          }
+        }
+      },
+      { threshold: 0.12, rootMargin: "64px 0px" }
+    );
+    io.observe(video);
+    return () => io.disconnect();
+  }, [url]);
+
+  return (
+    <video
+      ref={ref}
+      src={url}
+      aria-label={label}
+      className="h-full w-full object-cover"
+      muted
+      loop
+      playsInline
+      preload="auto"
+      onLoadedMetadata={(event) => seekVideoPreviewFrame(event.currentTarget, 0)}
+      onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
+    />
+  );
+}
 
 function useMediaMinLg() {
   return useSyncExternalStore(
@@ -151,11 +192,11 @@ export default function Home() {
 
   const channelTunnelItems = useMemo(
     () => [
-      { label: "Video", image: "/images/clove%202.0/clove3.mp4" },
-      { label: "Out of home", image: "/images/EVERY%20BIZ/ooh.mp4" },
-      { label: "Paid media", image: "/images/clove%202.0/paid.png" },
+      { label: "Video", image: "/images/clove 2.0/clove3.mp4" },
+      { label: "Out of home", image: "/images/EVERY BIZ/ooh.mp4" },
+      { label: "Paid media", image: "/images/clove 2.0/paid.png" },
       { label: "Events", image: "/images/SXSW/sxsw8.jpg" },
-      { label: "Website", image: "/images/ONE%20SOLUTION/sm1.gif" },
+      { label: "Website", image: "/images/ONE SOLUTION/sm1.gif" },
     ],
     []
   );
@@ -647,19 +688,10 @@ export default function Home() {
                     }`}
                   >
                     {isVideoAsset ? (
-                      <video
-                        src={item.image}
-                        aria-label={item.label}
-                        className="h-full w-full object-cover"
-                        muted
-                        loop
-                        playsInline
-                        preload="metadata"
-                        onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
-                      />
+                      <MobileBentoVideo src={item.image} label={item.label} />
                     ) : (
                       <img
-                        src={item.image}
+                        src={publicAssetUrl(item.image)}
                         alt={item.label}
                         className="h-full w-full object-cover"
                       />
@@ -715,18 +747,19 @@ export default function Home() {
                 >
                   {isVideo ? (
                     <video
-                      src={item.image}
+                      src={publicAssetUrl(item.image)}
                       aria-label={item.label}
                       className="h-full w-full object-cover shadow-[0_18px_48px_rgba(0,0,0,0.22)]"
                       muted
                       loop
                       playsInline
-                      preload="metadata"
+                      preload="auto"
+                      onLoadedMetadata={(event) => seekVideoPreviewFrame(event.currentTarget, 0)}
                       onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
                     />
                   ) : (
                     <img
-                      src={item.image}
+                      src={publicAssetUrl(item.image)}
                       alt={item.label}
                       className="h-full w-full object-cover shadow-[0_18px_48px_rgba(0,0,0,0.22)]"
                       style={{
@@ -889,7 +922,7 @@ export default function Home() {
                         aria-label={project.title}
                         muted
                         playsInline
-                        preload="metadata"
+                        preload="auto"
                         className="aspect-[16/10] h-full w-full rounded-t-2xl object-cover transition duration-300 ease-out"
                         style={{
                           filter: `brightness(${mediaBrightness})`,
@@ -897,7 +930,7 @@ export default function Home() {
                         onLoadedMetadata={(event) => {
                           const video = event.currentTarget;
                           const loopStart = project.videoLoopStart ?? 0;
-                          video.currentTime = loopStart;
+                          seekVideoPreviewFrame(video, loopStart);
                         }}
                         onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
                         onTimeUpdate={(event) => {

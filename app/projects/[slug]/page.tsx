@@ -9,6 +9,7 @@ import AutoSwipeImageCarousel from "../../components/AutoSwipeImageCarousel";
 import CoastMediaCarousel from "../../components/CoastMediaCarousel";
 import ProductLaunchesBannerRows from "../../components/ProductLaunchesBannerRows";
 import DualRotatingImageColumns from "../../components/DualRotatingImageColumns";
+import ClientVideo from "../../components/ClientVideo";
 import { projects } from "../../projects";
 import {
   cloveProductLaunchColumnOne,
@@ -286,30 +287,27 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             >
               {isAllInOne ? (
                 <div className="grid grid-cols-1 gap-2 md:grid-cols-2 md:gap-3">
-                  <video
+                  <ClientVideo
                     src="/images/ONE%20SOLUTION/bigvid1.mp4"
                     className="h-[320px] w-full rounded-lg object-cover md:h-[430px]"
                     controls
-                    playsInline
-                    preload="metadata"
+                    previewAt={0}
                   />
-                  <video
+                  <ClientVideo
                     src="/images/ONE%20SOLUTION/bigvid2.mp4"
                     className="h-[320px] w-full rounded-lg object-cover md:h-[430px]"
                     controls
-                    playsInline
-                    preload="metadata"
+                    previewAt={0}
                   />
                 </div>
               ) : isClaraOne ? (
                 <AutoSwipeImageCarousel images={claraHeaderImages} />
               ) : isHeroVideo ? (
-                <video
+                <ClientVideo
                   src={heroMedia}
                   className="h-full w-full object-cover"
                   controls
-                  playsInline
-                  preload="metadata"
+                  previewAt={0}
                 />
               ) : (
                 <img

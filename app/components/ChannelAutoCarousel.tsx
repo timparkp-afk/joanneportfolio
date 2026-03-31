@@ -6,6 +6,7 @@ import {
   unsubscribeChannelCarousel,
 } from "../lib/channelCarouselTicker";
 import { safeVideoPlay } from "../lib/safeVideoPlay";
+import { seekVideoPreviewFrame } from "../lib/seekVideoPreviewFrame";
 
 type ChannelAutoCarouselProps = {
   items: string[];
@@ -138,7 +139,8 @@ export default function ChannelAutoCarousel({
                     muted={videoAutoplay}
                     loop={videoAutoplay}
                     playsInline
-                    preload="metadata"
+                    preload="auto"
+                    onLoadedMetadata={(event) => seekVideoPreviewFrame(event.currentTarget, 0)}
                   />
                 ) : (
                   <img

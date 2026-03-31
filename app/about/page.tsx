@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { safeVideoPlay } from "../lib/safeVideoPlay";
+import { seekVideoPreviewFrame } from "../lib/seekVideoPreviewFrame";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Archivo, Bodoni_Moda } from "next/font/google";
@@ -448,7 +449,7 @@ export default function AboutPage() {
                         aria-label={project.title}
                         muted
                         playsInline
-                        preload="metadata"
+                        preload="auto"
                         className="aspect-[16/10] h-full w-full rounded-t-2xl object-cover transition duration-300 ease-out"
                         style={{
                           filter: `brightness(${0.5 + focusedByScroll * 0.4})`,
@@ -456,7 +457,7 @@ export default function AboutPage() {
                         onLoadedMetadata={(event) => {
                           const video = event.currentTarget;
                           const loopStart = project.videoLoopStart ?? 0;
-                          video.currentTime = loopStart;
+                          seekVideoPreviewFrame(video, loopStart);
                         }}
                         onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
                         onTimeUpdate={(event) => {

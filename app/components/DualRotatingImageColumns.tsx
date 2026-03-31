@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { safeVideoPlay } from "../lib/safeVideoPlay";
+import { seekVideoPreviewFrame } from "../lib/seekVideoPreviewFrame";
 
 type DualRotatingImageColumnsProps = {
   images: string[];
@@ -96,7 +97,8 @@ export default function DualRotatingImageColumns({
                     muted
                     loop
                     playsInline
-                    preload="metadata"
+                    preload="auto"
+                    onLoadedMetadata={(event) => seekVideoPreviewFrame(event.currentTarget, 0)}
                     onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
                   />
                 ) : (

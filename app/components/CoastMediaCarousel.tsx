@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { safeVideoPlay } from "../lib/safeVideoPlay";
+import { seekVideoPreviewFrame } from "../lib/seekVideoPreviewFrame";
 
 type CoastMediaCarouselProps = {
   media: string[];
@@ -88,7 +89,8 @@ export default function CoastMediaCarousel({ media }: CoastMediaCarouselProps) {
                   muted
                   loop
                   playsInline
-                  preload="metadata"
+                  preload="auto"
+                  onLoadedMetadata={(event) => seekVideoPreviewFrame(event.currentTarget, 0)}
                   onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
                 />
               ) : (
