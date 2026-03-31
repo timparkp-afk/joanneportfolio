@@ -68,7 +68,7 @@ export default function AboutPage() {
       {
         title: "Clove: SOLO",
         subtitle: "The brand's most successful product collection launch",
-        image: "/images/solo/solo.png",
+        image: "/images/SOLO/solo.png",
         href: "/projects/clove-solo",
       },
       {

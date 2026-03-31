@@ -54,7 +54,7 @@ export const projects: Project[] = [
     slug: "clove-solo",
     title: "Clove: SOLO",
     summary: "The brand's most successful product collection launch",
-    image: "/images/solo/solo.png",
+    image: "/images/SOLO/solo.png",
     details:
       "Use this page to add your full case study: Launch narrative, integrated channels, and results.",
     year: "2025",

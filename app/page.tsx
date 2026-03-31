@@ -66,7 +66,7 @@ export default function Home() {
       {
         title: "Clove: SOLO",
         subtitle: "The brand's most successful product collection launch",
-        image: "/images/solo/solo.png",
+        image: "/images/SOLO/solo.png",
         href: "/projects/clove-solo",
       },
       {
@@ -508,51 +508,75 @@ export default function Home() {
         />
       ))}
 
-      <nav
-        className={`fixed left-0 top-0 z-50 flex w-full items-start justify-between px-3 py-2 text-base tracking-wide text-[#0047ff] md:px-5 md:py-3 md:text-lg ${navFont.className}`}
+      <header
+        className={`fixed left-0 top-0 z-50 w-full border-b-0 bg-transparent pt-[calc(env(safe-area-inset-top)+24px)] text-base tracking-wide backdrop-blur-none md:pt-[env(safe-area-inset-top)] md:text-lg ${navFont.className}`}
       >
-        <Link href="/" className="inline-flex items-center gap-2 normal-case">
-          <span className="font-extrabold">Joanne</span>
-          <span className="hidden normal-case md:inline">{typedText}</span>
-          <span className="hidden animate-pulse md:inline">|</span>
-        </Link>
-        <div className="flex items-center gap-4 uppercase md:gap-6">
-          <Link
-            href="/about"
-            className="rounded-full border border-white/60 bg-white/25 px-3.5 py-1.5 text-sm shadow-[0_8px_24px_rgba(255,255,255,0.35),0_8px_20px_rgba(0,71,255,0.2)] backdrop-blur-xl md:px-4 md:py-1.5 md:text-base"
-          >
-            about
-          </Link>
-          <Link
-            href="/projects"
-            className="rounded-full border border-white/60 bg-white/25 px-3.5 py-1.5 text-sm shadow-[0_8px_24px_rgba(255,255,255,0.35),0_8px_20px_rgba(0,71,255,0.2)] backdrop-blur-xl md:px-4 md:py-1.5 md:text-base"
-          >
-            projects
-          </Link>
-          <Link
-            href="/channels"
-            className="rounded-full border border-white/60 bg-white/25 px-3.5 py-1.5 text-sm shadow-[0_8px_24px_rgba(255,255,255,0.35),0_8px_20px_rgba(0,71,255,0.2)] backdrop-blur-xl md:px-4 md:py-1.5 md:text-base"
-          >
-            channels
-          </Link>
-          <a
-            href="https://mail.google.com/mail/?view=cm&fs=1&to=johwangbo@gmail.com"
-            className="rounded-full border border-white/60 bg-white/25 px-3.5 py-1.5 text-sm shadow-[0_8px_24px_rgba(255,255,255,0.35),0_8px_20px_rgba(0,71,255,0.2)] backdrop-blur-xl md:px-4 md:py-1.5 md:text-base"
-          >
-            contact
-          </a>
-        </div>
-      </nav>
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 pb-2 pt-0 md:max-w-none md:flex-row md:items-start md:justify-between md:gap-4 md:px-5 md:py-3">
+          <div className="flex w-full justify-center overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] md:w-auto md:justify-start md:overflow-visible [&::-webkit-scrollbar]:hidden">
+            <Link
+              href="/"
+              className="inline-flex max-w-none min-w-0 flex-row flex-nowrap items-center justify-center gap-1.5 whitespace-nowrap normal-case text-[#0047ff] md:justify-start md:gap-2"
+            >
+              <span className="shrink-0 text-base font-extrabold leading-snug md:text-lg md:leading-normal">
+                Joanne
+              </span>
+              <span className="text-base font-medium leading-snug tracking-wide text-[#0047ff]/90 md:text-lg md:leading-normal">
+                {typedText}
+                <span className="inline animate-pulse">|</span>
+              </span>
+            </Link>
+          </div>
 
-      <section className="relative z-40 mt-20 min-h-[90vh] w-full pb-8 md:mt-24">
-        <section className="flex h-[76vh] w-full items-center justify-center overflow-hidden rounded-xl border border-white/20 bg-white/5 pt-10 md:pt-14">
+          <nav aria-label="Primary" className="w-full md:w-auto md:shrink-0">
+            <ul className="grid w-full list-none grid-cols-2 gap-1.5 p-0 uppercase md:flex md:w-auto md:items-center md:justify-end md:gap-6">
+              <li className="min-w-0">
+                <Link
+                  href="/about"
+                  className="flex min-h-[34px] w-full items-center justify-center rounded-full border border-white/60 bg-white/25 px-1.5 py-1 text-center text-[0.65rem] font-medium uppercase leading-tight tracking-wide shadow-[0_8px_24px_rgba(255,255,255,0.35),0_8px_20px_rgba(0,71,255,0.2)] backdrop-blur-xl sm:min-h-[38px] sm:px-2 sm:text-xs md:min-h-0 md:w-auto md:px-3.5 md:py-1.5 md:text-base"
+                >
+                  about
+                </Link>
+              </li>
+              <li className="min-w-0">
+                <Link
+                  href="/projects"
+                  className="flex min-h-[34px] w-full items-center justify-center rounded-full border border-white/60 bg-white/25 px-1.5 py-1 text-center text-[0.65rem] font-medium uppercase leading-tight tracking-wide shadow-[0_8px_24px_rgba(255,255,255,0.35),0_8px_20px_rgba(0,71,255,0.2)] backdrop-blur-xl sm:min-h-[38px] sm:px-2 sm:text-xs md:min-h-0 md:w-auto md:px-3.5 md:py-1.5 md:text-base"
+                >
+                  projects
+                </Link>
+              </li>
+              <li className="min-w-0">
+                <Link
+                  href="/channels"
+                  className="flex min-h-[34px] w-full items-center justify-center rounded-full border border-white/60 bg-white/25 px-1.5 py-1 text-center text-[0.65rem] font-medium uppercase leading-tight tracking-wide shadow-[0_8px_24px_rgba(255,255,255,0.35),0_8px_20px_rgba(0,71,255,0.2)] backdrop-blur-xl sm:min-h-[38px] sm:px-2 sm:text-xs md:min-h-0 md:w-auto md:px-3.5 md:py-1.5 md:text-base"
+                >
+                  channels
+                </Link>
+              </li>
+              <li className="min-w-0">
+                <a
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=johwangbo@gmail.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex min-h-[34px] w-full items-center justify-center rounded-full border border-white/60 bg-white/25 px-1.5 py-1 text-center text-[0.65rem] font-medium uppercase leading-tight tracking-wide shadow-[0_8px_24px_rgba(255,255,255,0.35),0_8px_20px_rgba(0,71,255,0.2)] backdrop-blur-xl sm:min-h-[38px] sm:px-2 sm:text-xs md:min-h-0 md:w-auto md:px-3.5 md:py-1.5 md:text-base"
+                >
+                  contact
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+
+      <section className="relative z-40 mt-[9.5rem] min-h-[90vh] w-full pb-8 md:mt-24">
+        <section className="flex h-[76vh] w-full items-center justify-center overflow-hidden rounded-xl border border-white/20 bg-white/5 px-4 pt-10 sm:px-6 md:px-10 md:pt-14">
           <h1
-            className={`w-full min-w-0 text-center text-[clamp(3.1rem,8.1vw,7.2rem)] font-semibold uppercase leading-[0.86] tracking-[0.01em] text-[#0047ff] ${headlineFont.className}`}
+            className={`mx-auto w-full min-w-0 max-w-full break-words text-balance text-center text-[clamp(1.45rem,5.2vw+0.65rem,7.2rem)] font-semibold uppercase leading-[0.92] tracking-[0.01em] text-[#0047ff] [overflow-wrap:anywhere] sm:text-[clamp(1.85rem,6vw+0.5rem,7.2rem)] sm:leading-[0.88] md:text-[clamp(2.5rem,7vw,7.2rem)] md:leading-[0.86] ${headlineFont.className}`}
           >
-            <span className="block whitespace-nowrap">copywriter,</span>
-            <span className="mt-[0.02em] block whitespace-nowrap text-[0.9em] tracking-[0.005em]">
-              visual
-              <span className="mx-[0.12em] inline-flex h-[0.84em] w-[1.2em] overflow-hidden rounded-[0.08em] align-[-0.08em]">
+            <span className="block md:whitespace-nowrap">copywriter,</span>
+            <span className="mt-[0.02em] flex flex-wrap items-center justify-center gap-x-[0.12em] gap-y-1 text-[0.9em] tracking-[0.005em] md:mt-[0.02em] md:block md:whitespace-nowrap md:gap-x-0 md:gap-y-0">
+              <span className="inline">visual</span>
+              <span className="mx-[0.06em] inline-flex h-[0.84em] min-h-[1em] w-[1.2em] min-w-[1.2em] shrink-0 overflow-hidden rounded-[0.08em] align-[-0.08em] sm:mx-[0.12em]">
                 <img
                   src="/images/EVERY%20BIZ/jw2.gif"
                   alt=""
@@ -560,9 +584,9 @@ export default function Home() {
                   className="h-full w-full object-cover"
                 />
               </span>
-              storyteller,
+              <span className="inline">storyteller,</span>
             </span>
-            <span className="mt-[0.02em] block whitespace-nowrap">&amp; killer poet</span>
+            <span className="mt-[0.02em] block md:whitespace-nowrap">&amp; killer poet</span>
           </h1>
         </section>
       </section>
@@ -752,14 +776,12 @@ export default function Home() {
               const isVideo = project.image.toLowerCase().endsWith(".mp4");
 
               return (
-                <a
+                <Link
                   key={project.title}
                   ref={(element) => {
                     carouselCardRefs.current[index] = element;
                   }}
                   href={project.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="group relative w-[79vw] shrink-0 snap-center overflow-visible md:w-[58vw] lg:w-[47vw]"
                   style={{
                     animationDelay: `${index * 80}ms`,
@@ -834,7 +856,7 @@ export default function Home() {
                       {project.subtitle}
                     </p>
                   </div>
-                </a>
+                </Link>
               );
             })}
             <div aria-hidden="true" className="w-[70vw] shrink-0 md:w-[54vw] lg:w-[44vw]" />

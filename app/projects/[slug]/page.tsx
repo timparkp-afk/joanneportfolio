@@ -127,14 +127,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     "/images/RYB/florist.mp4",
   ];
   const soloCarouselMedia = {
-    video1: encodeURI("/images/solo/carousel/VIDEO1.gif"),
-    tag: encodeURI("/images/solo/carousel/tag.png"),
-    lana: encodeURI("/images/solo/carousel/lana.png"),
-    sabina: encodeURI("/images/solo/carousel/sabina.png"),
-    tom: encodeURI("/images/solo/carousel/tom.png"),
-    tag2: encodeURI("/images/solo/carousel/tag2.png"),
-    tag3: encodeURI("/images/solo/carousel/tag3.png"),
-    shoes: encodeURI("/images/solo/carousel/shoes.png"),
+    video1: encodeURI("/images/SOLO/carousel/VIDEO1.gif"),
+    tag: encodeURI("/images/SOLO/carousel/tag.png"),
+    lana: encodeURI("/images/SOLO/carousel/lana.png"),
+    sabina: encodeURI("/images/SOLO/carousel/sabina.png"),
+    tom: encodeURI("/images/SOLO/carousel/tom.png"),
+    tag2: encodeURI("/images/SOLO/carousel/tag2.png"),
+    tag3: encodeURI("/images/SOLO/carousel/tag3.png"),
+    shoes: encodeURI("/images/SOLO/carousel/shoes.png"),
   };
   const coastCarouselMedia = [
     "/images/clove%202.0/clove3.mp4",
@@ -158,7 +158,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <main
-      className={`relative min-h-screen overflow-x-hidden px-4 pb-14 pt-20 text-[#dbe7ff] md:px-7 md:pt-24 ${bodyFont.className} ${
+      className={`relative min-h-screen overflow-x-hidden px-4 pb-14 pt-[9.5rem] text-[#dbe7ff] md:px-7 md:pt-24 ${bodyFont.className} ${
         isAllInOne
           ? "bg-[#1a1238]"
           : isRunYourBusiness
