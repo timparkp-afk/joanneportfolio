@@ -621,7 +621,7 @@ export default function Home() {
         >
           <div
             aria-hidden="true"
-            className={`pointer-events-none absolute inset-0 z-20 text-[#0047ff]/70 ${headlineFont.className}`}
+            className={`pointer-events-none absolute inset-0 z-20 hidden text-[#0047ff]/70 lg:block ${headlineFont.className}`}
           >
             <span className="absolute left-4 top-6 text-[clamp(2.8rem,10vw,8rem)] font-semibold leading-none md:left-10 md:top-8">
               writing
@@ -630,10 +630,51 @@ export default function Home() {
               for
             </span>
           </div>
+
+          {/* Mobile: stable grid — desktop tetris % layout breaks on narrow viewports */}
+          <div className="relative z-30 w-full px-4 sm:px-5 lg:hidden">
+            <div className="mx-auto grid w-full max-w-lg grid-cols-2 gap-2 sm:gap-3">
+              {channelTunnelItems.map((item, index) => {
+                const isVideoAsset = item.image.toLowerCase().endsWith(".mp4");
+                const isFeatured = index === 0;
+                return (
+                  <div
+                    key={`mobile-${item.label}`}
+                    className={`relative overflow-hidden rounded-xl border border-white/40 bg-white/5 shadow-[0_12px_28px_rgba(0,71,255,0.08)] ${
+                      isFeatured
+                        ? "col-span-2 aspect-[16/9] min-h-[168px] w-full"
+                        : "aspect-[4/5] min-h-[148px] w-full sm:min-h-[168px]"
+                    }`}
+                  >
+                    {isVideoAsset ? (
+                      <video
+                        src={item.image}
+                        aria-label={item.label}
+                        className="h-full w-full object-cover"
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                        onLoadedData={(event) => safeVideoPlay(event.currentTarget)}
+                      />
+                    ) : (
+                      <img
+                        src={item.image}
+                        alt={item.label}
+                        className="h-full w-full object-cover"
+                      />
+                    )}
+                    <p className="pointer-events-none absolute bottom-2 left-1/2 z-10 inline-flex max-w-[calc(100%-0.75rem)] -translate-x-1/2 items-center justify-center whitespace-nowrap rounded-full bg-black/68 px-[0.55em] py-[0.35em] text-[0.65rem] font-bold uppercase leading-none tracking-[0.06em] text-white sm:text-[0.68rem]">
+                      {item.label}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
           <div
-            className={`relative h-[min(72vh,680px)] w-[min(78vw,760px)] ${
-              isLg ? "translate-y-[4vh] md:translate-y-[3vh]" : "translate-y-0"
-            }`}
+            className={`relative hidden h-[min(72vh,680px)] w-[min(78vw,760px)] translate-y-[4vh] md:translate-y-[3vh] lg:block`}
           >
             {channelTunnelItems.map((item, index) => {
               const slot = channelTetrisSlots[index];
@@ -777,9 +818,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={carouselSectionRef} className="relative z-50 w-full overflow-hidden bg-transparent pb-24">
-        <div className="px-3 pt-20 md:px-6 lg:pt-24">
-          <div className="mb-2 flex justify-end lg:hidden">
+      <section ref={carouselSectionRef} className="relative z-50 w-full bg-transparent pb-24">
+        <div className="px-3 pt-20 md:px-6 lg:hidden">
+          <div className="mb-2 flex justify-end">
             <span
               className={`inline-flex items-center gap-[8px] text-sm font-medium tracking-wide text-[#0047ff] ${navFont.className}`}
               aria-label="Scroll horizontally to browse projects"
@@ -793,7 +834,7 @@ export default function Home() {
         </div>
         <div
           ref={carouselTrackRef}
-          className="scroll-px-3 overflow-x-auto overscroll-x-contain px-3 pb-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:px-6 md:scroll-px-6"
+          className="scroll-px-3 overflow-x-auto overscroll-x-contain px-3 pb-6 pt-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:px-6 md:scroll-px-6 lg:pt-24"
         >
           <div className="flex w-max min-w-full snap-x snap-mandatory gap-4 scroll-smooth md:gap-6">
             <div aria-hidden="true" className="shrink-0 max-lg:w-0 lg:w-[44vw]" />
